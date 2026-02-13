@@ -2,26 +2,35 @@
 
 VERSION=$1
 
-set $(curl -Ls https://github.com/redis/redis/archive/${VERSION}.tar.gz | shasum -a 256)
+set $(curl -Ls https://download.redis.io/releases/redis-${VERSION}.tar.gz | shasum -a 256)
 FILE_HASH=${1}
 
 cat << END_OF＿TEMPLATE
 class RedisCli < Formula
-  desc "Install the redis-cli only."
+  desc "Redis command-line interface client only"
   homepage "https://github.com/thgrace/homebrew-redis-cli"
   version "${VERSION}"
   sha256 "${FILE_HASH}"
-  url "https://github.com/redis/redis/archive/#{version}.tar.gz"
+  url "https://download.redis.io/releases/redis-#{version}.tar.gz"
+  license all_of: [
+    "AGPL-3.0-only",
+    "BSD-2-Clause",
+    "BSL-1.0",
+    "MIT",
+    any_of: ["CC0-1.0", "BSD-2-Clause"],
+  ]
+
+  depends_on "openssl@3"
 
   conflicts_with "redis", because: "redis already includes redis-cli"
 
   def install
-    system "make redis-cli"
-    bin.install "./src/redis-cli"
+    system "make", "redis-cli", "BUILD_TLS=yes", "CC=#{ENV.cc}"
+    bin.install "src/redis-cli"
   end
 
   test do
-    system "#{bin}/redis-cli"
+    system bin/"redis-cli", "--version"
   end
 end
 END_OF＿TEMPLATE
