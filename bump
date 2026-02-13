@@ -1,0 +1,25 @@
+#!/bin/bash -eu
+
+VERSION=$1
+
+set $(curl -Ls https://github.com/redis/redis/archive/${VERSION}.tar.gz | shasum -a 256)
+FILE_HASH=${1}
+
+cat << END_OF＿TEMPLATE
+class RedisCli < Formula
+  desc "Install the redis-cli only."
+  homepage "https://github.com/thgrace/homebrew-redis-cli"
+  version "${VERSION}"
+  sha256 "${FILE_HASH}"
+  url "https://github.com/redis/redis/archive/#{version}.tar.gz"
+
+  def install
+    system "make redis-cli"
+    bin.install "./src/redis-cli"
+  end
+
+  test do
+    system "#{bin}/redis-cli"
+  end
+end
+END_OF＿TEMPLATE
