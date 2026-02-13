@@ -1,24 +1,16 @@
 # homebrew-redis-cli
 
-Install a [redis-cli](http://redis.io/) via homebrew.
+Install [redis-cli](https://redis.io/) via Homebrew — without the full Redis server.
 
 ## Install
 
 ```bash
 brew tap thgrace/redis-cli
-brew update && brew doctor
 brew install redis-cli
 ```
 
-## Bump formula
+> **Note:** This conflicts with the `redis` formula as it packages the server and the cli.
 
-```
-./bump ${VERSION} > redis-cli.rb
-make link
-brew info redis-cli
-brew uninstall redis-cli
-brew install redis-cli
-redis-cli -v
-make unlink
-git tag ${VERSION}
-```
+## Version
+
+The formula is automatically updated daily via GitHub Actions when a new [Redis release](https://github.com/redis/redis/releases) is published.

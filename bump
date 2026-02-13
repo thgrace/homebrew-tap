@@ -13,6 +13,8 @@ class RedisCli < Formula
   sha256 "${FILE_HASH}"
   url "https://github.com/redis/redis/archive/#{version}.tar.gz"
 
+  conflicts_with "redis", because: "redis already includes redis-cli"
+
   def install
     system "make redis-cli"
     bin.install "./src/redis-cli"
