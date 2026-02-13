@@ -1,0 +1,38 @@
+name: Auto Bump Redis CLI
+
+on:
+  schedule:
+    - cron: '0 12 * * *' # daily at noon UTC
+  workflow_dispatch: # allow manual trigger
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get current formula version
+        id: current
+        run: echo "version=$(grep -m1 'version "' redis-cli.rb | sed 's/.*version "\(.*\)"/\1/')" >> "$GITHUB_OUTPUT"
+
+      - name: Get latest Redis release
+        id: latest
+        run: |
+          latest=$(curl -s https://api.github.com/repos/redis/redis/releases/latest | jq -r '.tag_name')
+          echo "version=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Bump formula
+        if: steps.current.outputs.version != steps.latest.outputs.version
+        run: |
+          echo "Bumping from ${{ steps.current.outputs.version }} to ${{ steps.latest.outputs.version }}"
+          ./bump ${{ steps.latest.outputs.version }} > redis-cli.rb
+
+      - name: Commit and push
+        if: steps.current.outputs.version != steps.latest.outputs.version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add redis-cli.rb
+          git commit -m "Bump redis-cli to ${{ steps.latest.outputs.version }}"
+          git tag "${{ steps.latest.outputs.version }}"
+          git push origin main --tags
