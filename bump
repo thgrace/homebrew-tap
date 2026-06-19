@@ -5,13 +5,12 @@ VERSION=$1
 set $(curl -Ls https://download.redis.io/releases/redis-${VERSION}.tar.gz | shasum -a 256)
 FILE_HASH=${1}
 
-cat << END_OF＿TEMPLATE
+cat << END_OF_TEMPLATE
 class RedisCli < Formula
   desc "Redis command-line interface client only"
-  homepage "https://github.com/thgrace/homebrew-redis-cli"
-  version "${VERSION}"
+  homepage "https://github.com/thgrace/homebrew-tap"
+  url "https://download.redis.io/releases/redis-${VERSION}.tar.gz"
   sha256 "${FILE_HASH}"
-  url "https://download.redis.io/releases/redis-#{version}.tar.gz"
   license all_of: [
     "AGPL-3.0-only",
     "BSD-2-Clause",
@@ -33,4 +32,4 @@ class RedisCli < Formula
     system bin/"redis-cli", "--version"
   end
 end
-END_OF＿TEMPLATE
+END_OF_TEMPLATE
