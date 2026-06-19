@@ -20,12 +20,19 @@ Install [oss-rebuild](https://github.com/google/oss-rebuild):
 brew install oss-rebuild
 ```
 
+Install [Opengrep](https://github.com/opengrep/opengrep):
+
+```bash
+brew install opengrep
+```
+
 ## Formulae
 
 | Formula | Description |
 | --- | --- |
 | `redis-cli` | Redis command-line interface client only. |
 | `oss-rebuild` | CLI tool for OSS Rebuild. |
+| `opengrep` | Static code analysis engine to find security issues in code. |
 
 ## Notes
 
