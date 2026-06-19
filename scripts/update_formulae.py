@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -14,10 +15,15 @@ ROOT = Path(__file__).resolve().parents[1]
 FORMULA = ROOT / "Formula"
 
 
+def is_github_host(url: str) -> bool:
+    host = urllib.parse.urlparse(url).hostname
+    return host == "github.com" or (host is not None and host.endswith(".github.com"))
+
+
 def request(url: str, *, accept: str | None = None) -> bytes:
     headers = {"User-Agent": "thgrace-homebrew-tap-updater"}
     token = os.environ.get("GITHUB_TOKEN")
-    if token and "github.com" in url:
+    if token and is_github_host(url):
         headers["Authorization"] = f"Bearer {token}"
     if accept:
         headers["Accept"] = accept
