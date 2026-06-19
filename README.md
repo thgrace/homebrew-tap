@@ -40,6 +40,8 @@ The `redis-cli` formula conflicts with the `redis` formula because `redis` alrea
 
 ## Version
 
-The `redis-cli` formula is automatically updated daily via GitHub Actions when a new [Redis release](https://github.com/redis/redis/releases) is published.
+The formulae are checked daily by GitHub Actions:
 
-The `oss-rebuild` formula is pinned to an upstream commit because `google/oss-rebuild` does not currently publish tagged releases.
+- `redis-cli` follows the latest stable [Redis release](https://github.com/redis/redis/releases).
+- `opengrep` follows the latest [Opengrep release](https://github.com/opengrep/opengrep/releases).
+- `oss-rebuild` follows the latest `main` commit because `google/oss-rebuild` does not currently publish tagged releases.
