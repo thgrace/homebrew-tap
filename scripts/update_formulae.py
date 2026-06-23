@@ -260,11 +260,87 @@ def update_oss_rebuild() -> bool:
     return changed
 
 
+def current_container_version() -> str:
+    formula = (FORMULA / "container.rb").read_text()
+    match = re.search(r"apple/container/releases/download/([^/]+)/container-", formula)
+    if not match:
+        raise RuntimeError("could not read current container version")
+    return match.group(1)
+
+
+def container_formula(version: str, checksum: str) -> str:
+    return f'''class Container < Formula
+  desc "Create and run Linux containers using lightweight virtual machines on Mac"
+  homepage "https://github.com/apple/container"
+  url "https://github.com/apple/container/releases/download/{version}/container-{version}-installer-signed.pkg",
+      using: :nounzip
+  sha256 "{checksum}"
+  license "Apache-2.0"
+  head "https://github.com/apple/container.git", branch: "main"
+
+  depends_on arch: :arm64
+  depends_on macos: :tahoe
+
+  def install
+    system "pkgutil", "--expand-full", cached_download, "pkg"
+
+    (libexec/"root").install Dir["pkg/Payload/*"]
+    bin.write_exec_script libexec/"root/bin/container"
+  end
+
+  def caveats
+    <<~EOS
+      container requires macOS 26 and Apple silicon.
+
+      Start the system service with:
+        container system start
+    EOS
+  end
+
+  test do
+    assert_match version.to_s, shell_output("#{{bin}}/container --version")
+  end
+end
+'''
+
+
+def update_container() -> bool:
+    current = current_container_version()
+    release = github_json("repos/apple/container/releases/latest")
+    latest = release.get("tag_name")
+    if not latest or not re.fullmatch(r"\d+\.\d+\.\d+", latest):
+        raise RuntimeError(f"unexpected container latest tag: {latest!r}")
+    if semver(latest) < semver(current):
+        print(f"container: latest {latest} is older than current {current}; skipping")
+        return False
+    if latest == current:
+        print(f"container: already at {current}")
+        return False
+
+    asset_name = f"container-{latest}-installer-signed.pkg"
+    assets = {asset["name"]: asset for asset in release.get("assets", [])}
+    asset = assets.get(asset_name)
+    if not asset:
+        raise RuntimeError(f"container release {latest} is missing asset: {asset_name}")
+
+    digest = asset.get("digest", "")
+    if digest.startswith("sha256:"):
+        checksum = digest.removeprefix("sha256:")
+    else:
+        checksum = sha256_url(asset["browser_download_url"])
+
+    changed = write_if_changed(FORMULA / "container.rb", container_formula(latest, checksum))
+    if changed:
+        print(f"container: updated {current} -> {latest}")
+    return changed
+
+
 def main() -> int:
     changed = [
         update_redis(),
         update_opengrep(),
         update_oss_rebuild(),
+        update_container(),
     ]
     if any(changed):
         print("formulae updated")
