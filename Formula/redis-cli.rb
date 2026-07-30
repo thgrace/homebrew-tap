@@ -1,8 +1,8 @@
 class RedisCli < Formula
   desc "Redis command-line interface client only"
   homepage "https://github.com/thgrace/homebrew-tap"
-  url "https://download.redis.io/releases/redis-8.8.1.tar.gz"
-  sha256 "1d1e423c9c808de3cb01dd3300d2b8d305b7691382e31a847ec17b66d3157477"
+  url "https://download.redis.io/releases/redis-8.10.0.tar.gz"
+  sha256 "f1baa4b28befd417aa6577ebeedde9e9fc7814cfcc299b2a6d2fd99ef7420a6c"
   license all_of: [
     "AGPL-3.0-only",
     "BSD-2-Clause",
