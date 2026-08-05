@@ -1,9 +1,9 @@
 class OssRebuild < Formula
   desc "CLI tool for OSS Rebuild"
   homepage "https://github.com/google/oss-rebuild"
-  url "https://github.com/google/oss-rebuild/archive/4e795054fca753199927b3ae1174ee0235ca55df.tar.gz"
-  version "2026.08.04-4e79505"
-  sha256 "d3b110933568154f923b26f5737953c5102dd5434931176f281d6e4e55446b89"
+  url "https://github.com/google/oss-rebuild/archive/68b47c843019f24f80415642052c6aa92b0541c3.tar.gz"
+  version "2026.08.05-68b47c8"
+  sha256 "03fd2a9aa3d7708e8a394d6ceb4c9992200bcd8075e2d8cf47b26bb0b6b897d4"
   license "Apache-2.0"
   head "https://github.com/google/oss-rebuild.git", branch: "main"
 
