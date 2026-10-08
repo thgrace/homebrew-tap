@@ -1,28 +1,28 @@
 class Opengrep < Formula
   desc "Static code analysis engine to find security issues in code"
   homepage "https://github.com/opengrep/opengrep"
-  version "1.30.1"
+  version "1.30.2"
   license "LGPL-2.1-only"
 
   on_macos do
     on_arm do
       url "https://github.com/opengrep/opengrep/releases/download/v#{version}/opengrep_osx_arm64"
-      sha256 "7b788794e111ce3fb83f0aa52c100a3b85d37d8b59482262109031f50d4a8d91"
+      sha256 "f1aaa30b88959cb82522c4e1475816278a1f161f994509a518453c0455f9d24b"
     end
     on_intel do
       url "https://github.com/opengrep/opengrep/releases/download/v#{version}/opengrep_osx_x86"
-      sha256 "a8c6d5f51bb38253b48e9a80fca63684aa2a0f9abfeacea27b8d8b5778476bae"
+      sha256 "fcf47da30d5c3a11119f2ec4e0d1ee55e3c3822e8f90d909bf9f33dfce99044a"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/opengrep/opengrep/releases/download/v#{version}/opengrep_manylinux_aarch64"
-      sha256 "a730f6fdce1e978ea29e610a2e0503bfe1ec31fce08979a9a84e3699f03e16ee"
+      sha256 "90acea5df4b733083f388d4feeb250ca802f671b33d1f222653d1e571dd2b0d8"
     end
     on_intel do
       url "https://github.com/opengrep/opengrep/releases/download/v#{version}/opengrep_manylinux_x86"
-      sha256 "d3195b9d8d5ae93179f6aa5f5daaba6a920a5a09d38c5d5ae5e60924050210c4"
+      sha256 "a66aa3278457f02b287b985a45b6762aebcaba5000f2689245fd1ed86d1456c7"
     end
   end
 
